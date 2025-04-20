@@ -1,0 +1,242 @@
+id: bring_your_own_data_chat_qna
+name: Basic RAG with basic Agent
+inputs:
+  chat_history:
+    type: list
+    default:
+    - inputs:
+        chat_input: Hi
+      outputs:
+        chat_output: Hello! How can I assist you today?
+    - inputs:
+        chat_input: What is Azure compute instance?
+      outputs:
+        chat_output: An Azure Machine Learning compute instance is a fully managed
+          cloud-based workstation for data scientists. It provides a
+          pre-configured and managed development environment in the cloud for
+          machine learning. Compute instances can also be used as a compute
+          target for training and inferencing for development and testing
+          purposes. They have a job queue, run jobs securely in a virtual
+          network environment, and can run multiple small jobs in parallel.
+          Additionally, compute instances support single-node multi-GPU
+          distributed training jobs.
+    is_chat_input: false
+    is_chat_history: true
+  chat_input:
+    type: string
+    default: How can I create one using azureml sdk V2?
+    is_chat_input: true
+outputs:
+  chat_output:
+    type: string
+    reference: ${chat_with_context.output}
+    is_chat_output: true
+nodes:
+- name: modify_query_with_history
+  type: llm
+  source:
+    type: code
+    path: modify_query_with_history.jinja2
+  inputs:
+    deployment_name: gpt-4o
+    temperature: 0
+    top_p: 1
+    max_tokens: 1000
+    response_format:
+      type: text
+    presence_penalty: 0
+    frequency_penalty: 0
+    chat_history: ${inputs.chat_history}
+    chat_input: ${inputs.chat_input}
+  provider: AzureOpenAI
+  connection: ai-dvillacreses12342072ai446355269001_aoai
+  api: chat
+  module: promptflow.tools.aoai
+  use_variants: false
+- name: get_client_id
+  type: llm
+  source:
+    type: code
+    path: get_client_id__variant_1.jinja2
+  inputs:
+    deployment_name: gpt-4o
+    temperature: 0
+    top_p: 1
+    response_format:
+      type: text
+    question: ${modify_query_with_history.output}
+  provider: AzureOpenAI
+  connection: ai-dvillacreses12342072ai446355269001_aoai
+  api: chat
+  module: promptflow.tools.aoai
+  activate:
+    when: ${agent.output}
+    is: dataset_python
+  use_variants: false
+- name: agent
+  use_variants: true
+- name: lookup
+  type: python
+  source:
+    type: package
+    tool: promptflow_vectordb.tool.common_index_lookup.search
+  inputs:
+    mlindex_content: >
+      embeddings:
+        connection:
+          id: 
+            /subscriptions/6cfd1a80-275b-47d3-9a62-5257a45aa9ce/resourceGroups/rg-dvillacreses1234-3107_ai/providers/Microsoft.MachineLearningServices/workspaces/dvillacreses1234-8208/connections/ai-dvillacreses12342072ai446355269001_aoai
+        connection_type: workspace_connection
+        deployment: ''
+        dimension: 0
+        file_format_version: '2'
+        kind: none
+        model: text-embedding-ada-002
+        schema_version: '2'
+      index:
+        api_version: 2024-05-01-preview
+        connection:
+          id: 
+            /subscriptions/6cfd1a80-275b-47d3-9a62-5257a45aa9ce/resourceGroups/rg-dvillacreses1234-3107_ai/providers/Microsoft.MachineLearningServices/workspaces/dvillacreses1234-8208/connections/dvsearchec314
+        connection_type: workspace_connection
+        endpoint: https://dvsearchec314.search.windows.net/
+        engine: azure-sdk
+        field_mapping:
+          content: content
+          filename: filepath
+          metadata: meta_json_string
+          title: title
+          url: url
+        index: magenta-yam-rzwn44c522
+        kind: acs
+        semantic_configuration_name: azureml-default
+      self:
+        path: 
+          azureml://subscriptions/6cfd1a80-275b-47d3-9a62-5257a45aa9ce/resourcegroups/rg-dvillacreses1234-3107_ai/workspaces/dvillacreses1234-8208/datastores/workspaceblobstore/paths/azureml/70d9be41-9497-44ef-a726-fcfe16de51d8/index/
+        asset_id: 
+          azureml://locations/eastus2/workspaces/d28648db-7469-4bd3-a45f-130512d482c6/data/magenta-yam-rzwn44c522/versions/1
+    queries: ${modify_query_with_history.output}
+    query_type: Semantic
+    top_k: 2
+  activate:
+    when: ${agent.output}
+    is: vector_database
+  use_variants: false
+- name: generate_prompt_context
+  type: python
+  source:
+    type: code
+    path: generate_prompt_context.py
+  inputs:
+    search_result: ${lookup.output}
+  use_variants: false
+- name: Prompt_variants
+  use_variants: true
+- name: chat_with_context
+  type: llm
+  source:
+    type: code
+    path: chat_with_context__variant_2.jinja2
+  inputs:
+    deployment_name: gpt-4o
+    temperature: 0
+    top_p: 1
+    max_tokens: 1000
+    response_format:
+      type: text
+    presence_penalty: 0
+    frequency_penalty: 0
+    agent_output: ${agent.output}
+    prompt_text: ${Prompt_variants.output}
+    python_response: ${predictor.output}
+  provider: AzureOpenAI
+  connection: ai-dvillacreses12342072ai446355269001_aoai
+  api: chat
+  module: promptflow.tools.aoai
+  use_variants: false
+- name: predictor
+  type: python
+  source:
+    type: code
+    path: predictor.py
+  inputs:
+    client_id: ${get_client_id.output}
+  use_variants: false
+node_variants:
+  agent:
+    default_variant_id: variant_1
+    variants:
+      variant_0:
+        node:
+          name: agent
+          type: llm
+          source:
+            type: code
+            path: agent.jinja2
+          inputs:
+            deployment_name: gpt-4o
+            temperature: 0
+            top_p: 1
+            response_format:
+              type: text
+            question: ${modify_query_with_history.output}
+          provider: AzureOpenAI
+          connection: ai-dvillacreses12342072ai446355269001_aoai
+          api: chat
+          module: promptflow.tools.aoai
+      variant_1:
+        node:
+          name: agent
+          type: llm
+          source:
+            type: code
+            path: agent__variant_1.jinja2
+          inputs:
+            deployment_name: gpt-4o
+            temperature: 0
+            top_p: 1
+            response_format:
+              type: text
+            question: ${modify_query_with_history.output}
+          provider: AzureOpenAI
+          connection: ai-dvillacreses12342072ai446355269001_aoai
+          api: chat
+          module: promptflow.tools.aoai
+  Prompt_variants:
+    default_variant_id: variant_0
+    variants:
+      variant_0:
+        node:
+          name: Prompt_variants
+          type: prompt
+          source:
+            type: code
+            path: Prompt_variants.jinja2
+          inputs:
+            contexts: ${generate_prompt_context.output}
+            chat_history: ${inputs.chat_history}
+            chat_input: ${inputs.chat_input}
+      variant_1:
+        node:
+          name: Prompt_variants
+          type: prompt
+          source:
+            type: code
+            path: Prompt_variants__variant_1.jinja2
+          inputs:
+            contexts: ${generate_prompt_context.output}
+            chat_history: ${inputs.chat_history}
+            chat_input: ${inputs.chat_input}
+      variant_2:
+        node:
+          name: Prompt_variants
+          type: prompt
+          source:
+            type: code
+            path: Prompt_variants__variant_2.jinja2
+          inputs:
+            contexts: ${generate_prompt_context.output}
+            chat_history: ${inputs.chat_history}
+            chat_input: ${inputs.chat_input}
+environment:
+  python_requirements_txt: requirements.txt
