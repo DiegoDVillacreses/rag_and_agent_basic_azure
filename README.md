@@ -5,4 +5,4 @@ This pipeline delivers a ready‑to‑use AI assistant you can try in Azure Foun
 - **Retrieval‑Augmented Generation (RAG):** Pulls in the most relevant snippets from your document store to answer questions.  
 - **Historical Forecasting:** Runs Python scripts on your time‑series dataset to generate forecasts and data‑driven insights.
 
-All you need to do is point the upload the YAML file to `Prompt Flow` from Azure Foundry, configure the vector database and the access to historical and data.
+All you need to do is upload the YAML file to `Prompt Flow` in Azure Foundry, configure the vector database and access to historical and data.
