@@ -62,8 +62,13 @@ Examples of results from our Agent:
 
 <img width="341" alt="image" src="https://github.com/user-attachments/assets/51abb835-20e4-4407-9e8a-a351892dce7b" />
 
+## Results of Deployment
 
+We use the automatic deployment feature of Azure Foundry, then we generate different examples using the code in `main.py` getting the following results:
 
+<img width="765" alt="example_results_deployment" src="https://github.com/user-attachments/assets/68890994-1692-4733-a735-8e417530573f" />
+
+Additional results can be found in `deployment_example.ipynb`.
 
 ## Future Work
 ### RAG Architecture
