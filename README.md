@@ -11,13 +11,17 @@ A visual summary of this simple agent:
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/df1de885-74c0-48e7-a637-1d2c31e5bdc7" />
 
+## Data
+
+All the used data is synthetic, the pdfs where produced using `simul_pdfs.ipynb` and the historical information with `simul_historic.ipynb`. The pdfs where generated trying to simulate real documents with messy information and complex formats. We produce 20 synthetic client information. All the used information can be found in the folder `simulated_data`.
+
 ## Prerequisites
 
 - Connection: Azure OpenAI or OpenAI connection, with the availability of chat and embedding models/deployments.
 
 ## Benchmarks
 
-* **Dataset** – 10 synthetic Q&A pairs (net‑worth lookup) with numeric ground‑truth values. All the results from the benchmark can be found in `evaluation_evaluation_agent_rag_simple_variant_1_Output_Table_04-20-2025-15-34.csv`.
+* **Dataset** – 10 synthetic Q&A pairs (net‑worth lookup) with numeric ground‑truth values. All the results from the benchmark can be found in `evaluation_evaluation_agent_rag_simple_variant_1_Output_Table_04-20-2025-15-34.csv`. Also, in `rag_eval.jsonl` the user can find the full evaluation dataset.
 
 **Metrics**
 - **Coherence:** Measures if the answer logically follows the question.  
@@ -80,10 +84,10 @@ Recall that in order to evaluate the performance of an AI system, we usually com
 ### Model Selection
 For all LLM nodes we used GPT-4o, this could not be an optimal decision from a cost-benefit point of view. We could only be sure with a true benchmark, and the evaluate relevant score metrics against response time and LLM usage cost. A summary of those relationships according to Azure [https://ai.azure.com/explore/models/leaderboard] (April 2025) are:
 
-<img width="800" alt="output_vs_cost_azure_20april2025" src="https://github.com/user-attachments/assets/09e45617-b9c7-421e-a884-0d497d746f73" />
+<img width="800" alt="quality_vs_cost_azure_20april2025" src="https://github.com/user-attachments/assets/64877b5a-44da-40cf-83aa-a9a480681af8" />
 
+<img width="800" alt="output_vs_cost_azure_20april2025" src="https://github.com/user-attachments/assets/b8773140-7f9b-4e3c-90ae-9ba9876a80df" />
 
-<img width="331" alt="image" src="https://github.com/user-attachments/assets/6b3f0208-1161-4ca1-81e3-b4ea96d21600" />
 
 
 
