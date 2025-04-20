@@ -7,6 +7,12 @@ This pipeline delivers a ready‑to‑use AI assistant you can try in Azure Foun
 
 All you need to do is upload the zip file to `Prompt Flow` in Azure Foundry (select `Chat flow` in flow type), configure the vector database and access to historical and data.
 
+A visual summary of our simple agent:
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/df1de885-74c0-48e7-a637-1d2c31e5bdc7" />
+
+
+
 ## Prerequisites
 
 - Connection: Azure OpenAI or OpenAI connection, with the availability of chat and embedding models/deployments.
