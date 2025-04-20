@@ -6,3 +6,7 @@ This pipeline delivers a ready‑to‑use AI assistant you can try in Azure Foun
 - **Historical Forecasting:** Runs a Python script on the client time‑series dataset to generate forecasts.
 
 All you need to do is upload the YAML file to `Prompt Flow` in Azure Foundry, configure the vector database and access to historical and data.
+
+## Prerequisites
+
+- Connection: Azure OpenAI or OpenAI connection, with the availability of chat and embedding models/deployments.
