@@ -19,7 +19,7 @@ A visual summary of this simple agent:
 
 ## Future Work
 ### RAG Architecture
-The RAG architecture is crucial to get more precise answers, an interesting compilation of state of the art models are in Papers with Code (2025). In this project we implement a basic architecture like:
+The RAG architecture is crucial to get more precise answers, an interesting compilation of state of the art models are in *Papers with Code* (2025). In this project we implement a basic architecture like:
 
 <img src="https://github.com/user-attachments/assets/b9f86766-4858-42ef-a04a-bc30d5d37cde" alt="Basic RAG Architecture" width="800"/>
 
