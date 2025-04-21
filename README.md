@@ -11,9 +11,30 @@ A visual summary of this simple agent:
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/df1de885-74c0-48e7-a637-1d2c31e5bdc7" />
 
+## How it works
+The most important stept is the `Agent Router`. Immediately after the user's input, the assistant decides (on every user turn) whether to:
+1. query the vector store (RAG),  
+2. run a Python‐based forecasting tool, or  
+3. return a fallback message.
+
+We provide GPT-4o the following prompt:
+```text
+You are tasked with classifying the user's query. Based on the content of the question, select **exactly one** of the following labels: `vector_database`, `dataset_python`, or `none`.
+Provide **only** the chosen label as your response, without any additional text.
+
+- **vector_database**: the user is inquiring about specific client data stored in the vector database.
+- **dataset_python**: the user is requesting forecasting information for a specific client.
+- **none**: the query does not fit either category.
+
+If unsure, respond with "none".
+
+user:
+{{ question }}
+```
+
 ## Data
 
-All the used data is synthetic, the pdfs where produced using `simul_pdfs.ipynb` and the historical information with `simul_historic.ipynb`. The pdfs where generated trying to simulate real documents with messy information and complex formats. We produce 20 synthetic client information. All the used information can be found in the folder `simulated_data`.
+All the used data is synthetic, the pdfs were produced using `simul_pdfs.ipynb` and the historical information with `simul_historic.ipynb`. The pdfs were generated trying to simulate real documents with messy information and complex formats. We produce 20 synthetic client information. All the used information can be found in the folder `simulated_data`.
 
 ## Prerequisites
 
