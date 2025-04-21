@@ -93,6 +93,24 @@ For all LLM nodes we used GPT-4o, this could not be an optimal decision from a c
 
 <img width="800" alt="output_vs_cost_azure_20april2025" src="https://github.com/user-attachments/assets/b8773140-7f9b-4e3c-90ae-9ba9876a80df" />
 
+### Human Testing
+Future work should include user stress tests to assess the agent’s accuracy, helpfulness, and ability to handle complex queries. This process helps to identify real world issues. Many of those issues could be improved with simple prompt engineering.
+
+### Improvements for Deployment
+
+Future work should optimize vector database settings (e.g., embedding size, top‑k), speed up access to massive structured datasets, and profile the pipeline to detect bottlenecks. Secure access to to the vector database and the structured datasets should also be addressed.
+
+
+## General Description of Files
+
+- **`main.py`**: Sends input queries to the deployed agent and prints responses.
+- **`deployment_example.ipynb`**: Example notebook to test the agent after deployment.
+- **`simul_pdfs.ipynb`**: Generates synthetic client PDFs with messy, realistic formats.
+- **`simul_historic.ipynb`**: Creates synthetic time-series financial data.
+- **`simulated_data/`**: Contains all synthetic PDFs and historical datasets.
+- **`rag_eval.jsonl`**: Evaluation dataset with synthetic Q&A.
+- **`evaluation_*.csv`**: Benchmark results file.
+- **agent_basic_rag_basic.zip`**: Files to replicate our simple agent in Azure Foundry.
 
 
 
